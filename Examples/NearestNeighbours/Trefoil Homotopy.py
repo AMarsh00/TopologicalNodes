@@ -1,5 +1,5 @@
 """
-TrefoilHomotopy.py
+Trefoil Homotopy.py
 Alexander Marsh
 Last Modified 03 September 2025
 
@@ -7,7 +7,6 @@ A pytorch implementation of an autoencoder that learns a parameterization of a t
 """
 
 import os
-import math
 import numpy as np
 import torch
 import torch.nn.init as init
@@ -27,7 +26,7 @@ LATENT_DIM = 2     # Latent dimension (2D)
 NUM_HIDDEN_LAYERS = 0
 
 # --- Prepare Data (Knot points) ---
-tparam = np.arange(-math.pi, math.pi, 0.05)
+tparam = np.arange(-np.pi, np.pi, 0.05)
 
 x = np.cos(tparam) + 2 * np.cos(2 * tparam)
 y = np.sin(tparam) - 2 * np.sin(2 * tparam)
@@ -253,14 +252,14 @@ plt.figure()
 plt.plot(non_circular_latent[:, 0].numpy(), non_circular_latent[:, 1].numpy())
 plt.title('Non-Circular Latent Space Representation - Test Data')
 plt.savefig('HomotopyResults/NonCircularLatentTestData.png')
-#plt.show()
+plt.show()
 
 # --- Plot Circular Latent Space ---
 plt.figure()
 plt.scatter(circular_latent[:, 0].numpy(), circular_latent[:, 1].numpy())
 plt.title('Circular Latent Space Representation - Test Data')
 plt.savefig('HomotopyResults/CircularLatentTestData.png')
-#plt.show()
+plt.show()
 
 # --- 3D Plot of Original vs Reconstructed Data ---
 fig = plt.figure()
@@ -279,7 +278,7 @@ ax.scatter(data_test[:, 0], data_test[:, 1], data_test[:, 2], c='g', label='Test
 ax.set_title('Original vs Reconstructed 3D Data (Test Data)')
 ax.legend()
 plt.savefig('HomotopyResults/ReconstructedTestData.png')
-#plt.show()
+plt.show()
 
 # --- 3D Animation of Reconstructed Data ---
 fig_3d = plt.figure()
@@ -299,8 +298,7 @@ def update_3d(epoch):
     for start in range(1, reconstructed_data.shape[0] - 1, 2):
         ax_3d.plot(reconstructed_data[start:start+2, 0], reconstructed_data[start:start+2, 1], reconstructed_data[start:start+2, 2], 'ro-')
 
-    ax_3d.scatter(reconstructed_data[:, 0], reconstructed_data[:, 1], reconstructed_data[:, 2], c='r',
-                  label=f'Reconstructed at Epoch {epoch}')
+    ax_3d.scatter(reconstructed_data[:, 0], reconstructed_data[:, 1], reconstructed_data[:, 2], c='r', label=f'Reconstructed at Epoch {epoch}')
     ax_3d.set_xlabel('X')
     ax_3d.set_ylabel('Y')
     ax_3d.set_zlabel('Z')
@@ -342,4 +340,4 @@ fig_latent, ax_latent = plt.subplots()
 ani_latent = animate_latent_space(fig_latent, ax_latent, keeplatent, 'Circular Latent Space')
 ani_latent.save('HomotopyResults/circular_latent.gif', fps=15)
 
-#plt.show()
+plt.show()
