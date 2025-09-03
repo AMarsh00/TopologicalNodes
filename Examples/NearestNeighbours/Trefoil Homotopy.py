@@ -3,6 +3,8 @@ Trefoil Homotopy.py
 Alexander Marsh
 Last Modified 03 September 2025
 
+GNU Affero General Public License
+
 A pytorch implementation of an autoencoder that learns a parameterization of a trefoil knot by a circle via a nearest neighbours based penalty.
 """
 
