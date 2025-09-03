@@ -105,12 +105,11 @@ class CircularNode(torch.nn.Module):
 
         # We want to normalize the circular node to a circle after it is unknotted
         if epoch > 3000:
-            n = out.shape[0]
-            out -= torch.mean(out)
-            normalized = torch.zeros_like(out)
-            for i in range(n):
-                normalized[i] = out[i] / (torch.norm(out[i]) + 1e-8)
-            out = normalized
+            out = out - out.mean(dim=0, keepdim=True)  # center data
+
+            # Normalize each vector individually to unit length:
+            norms = torch.norm(out, dim=1, keepdim=True) + 1e-8
+            out = out / norms
 
         return out
 
@@ -280,6 +279,8 @@ ax.legend()
 plt.savefig('HomotopyResults/ReconstructedTestData.png')
 plt.show()
 
+print("Saving Results...")
+
 # --- 3D Animation of Reconstructed Data ---
 fig_3d = plt.figure()
 ax_3d = fig_3d.add_subplot(111, projection='3d')
@@ -289,8 +290,7 @@ ax_3d.set_zlim([-5, 5])
 
 def update_3d(epoch):
     ax_3d.cla()  # Clear axes for each frame
-    ax_3d.scatter(data_train.detach().numpy()[:, 0], data_train.detach().numpy()[:, 1], data_train.detach().numpy()[:, 2],
-                  c='g', label='Original 3D Data')
+    ax_3d.scatter(data_train.detach().numpy()[:, 0], data_train.detach().numpy()[:, 1], data_train.detach().numpy()[:, 2], c='g', label='Original 3D Data')
 
     reconstructed_data = keepdata[epoch].detach().numpy()
     for start in range(0, reconstructed_data.shape[0], 2):
@@ -339,5 +339,7 @@ ani_nc_latent.save('HomotopyResults/non_circular_latent.gif', fps=15)
 fig_latent, ax_latent = plt.subplots()
 ani_latent = animate_latent_space(fig_latent, ax_latent, keeplatent, 'Circular Latent Space')
 ani_latent.save('HomotopyResults/circular_latent.gif', fps=15)
+
+print("Results Saved!")
 
 plt.show()
