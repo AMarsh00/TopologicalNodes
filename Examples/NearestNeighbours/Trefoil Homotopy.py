@@ -310,7 +310,7 @@ def update_3d(epoch):
     ax_3d.set_ylim([-5, 5])
     ax_3d.set_zlim([-5, 5])
 
-ani_3d = FuncAnimation(fig_3d, update_3d, frames=range(0, len(keeplatent), 10), interval=100, repeat=True)
+ani_3d = FuncAnimation(fig_3d, update_3d, frames=range(0, len(keeplatent), 10), interval=100, repeat=True) # Toggle repeat=False to not automatically loop animation
 ani_3d.save('HomotopyResults/Trefoil/reconstruction.gif', fps=15)
 
 # --- 2D Animation Utility Function ---
@@ -330,7 +330,7 @@ def animate_latent_space(fig, ax, latent_data_seq, title):
         ax.set_title(title)
         ax.legend()
 
-    return FuncAnimation(fig, update, frames=range(0, len(latent_data_seq), 10), interval=100, repeat=True)
+    return FuncAnimation(fig, update, frames=range(0, len(latent_data_seq), 10), interval=100, repeat=True) # Toggle repeat=False to not automatically loop animation
 
 # --- Non-Circular Latent Space Animation ---
 fig_nc_latent, ax_nc_latent = plt.subplots()
