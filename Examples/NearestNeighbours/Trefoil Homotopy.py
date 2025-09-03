@@ -15,7 +15,7 @@ from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d import Axes3D
 
 # Ensure output directory exists
-os.makedirs("HomotopyResults", exist_ok=True)
+os.makedirs("HomotopyResults/Trefoil", exist_ok=True)
 
 # --- Hyperparameters ---
 EPOCHS = 4000
@@ -250,14 +250,14 @@ with torch.no_grad():
 plt.figure()
 plt.plot(non_circular_latent[:, 0].numpy(), non_circular_latent[:, 1].numpy())
 plt.title('Non-Circular Latent Space Representation - Test Data')
-plt.savefig('HomotopyResults/NonCircularLatentTestData.png')
+plt.savefig('HomotopyResults/Trefoil/NonCircularLatentTestData.png')
 plt.show()
 
 # --- Plot Circular Latent Space ---
 plt.figure()
 plt.scatter(circular_latent[:, 0].numpy(), circular_latent[:, 1].numpy())
 plt.title('Circular Latent Space Representation - Test Data')
-plt.savefig('HomotopyResults/CircularLatentTestData.png')
+plt.savefig('HomotopyResults/Trefoil/CircularLatentTestData.png')
 plt.show()
 
 # --- 3D Plot of Original vs Reconstructed Data ---
@@ -276,7 +276,7 @@ ax.scatter(data_test[:, 0], data_test[:, 1], data_test[:, 2], c='g', label='Test
 
 ax.set_title('Original vs Reconstructed 3D Data (Test Data)')
 ax.legend()
-plt.savefig('HomotopyResults/ReconstructedTestData.png')
+plt.savefig('HomotopyResults/Trefoil/ReconstructedTestData.png')
 plt.show()
 
 print("Saving Results...")
@@ -309,7 +309,7 @@ def update_3d(epoch):
     ax_3d.set_zlim([-5, 5])
 
 ani_3d = FuncAnimation(fig_3d, update_3d, frames=range(0, len(keeplatent), 10), interval=100, repeat=True)
-ani_3d.save('HomotopyResults/reconstruction.gif', fps=15)
+ani_3d.save('HomotopyResults/Trefoil/reconstruction.gif', fps=15)
 
 # --- 2D Animation Utility Function ---
 def animate_latent_space(fig, ax, latent_data_seq, title):
@@ -333,12 +333,12 @@ def animate_latent_space(fig, ax, latent_data_seq, title):
 # --- Non-Circular Latent Space Animation ---
 fig_nc_latent, ax_nc_latent = plt.subplots()
 ani_nc_latent = animate_latent_space(fig_nc_latent, ax_nc_latent, keeplatentnc, 'Non-Circular Latent Space')
-ani_nc_latent.save('HomotopyResults/non_circular_latent.gif', fps=15)
+ani_nc_latent.save('HomotopyResults/Trefoil/non_circular_latent.gif', fps=15)
 
 # --- Circular Latent Space Animation ---
 fig_latent, ax_latent = plt.subplots()
 ani_latent = animate_latent_space(fig_latent, ax_latent, keeplatent, 'Circular Latent Space')
-ani_latent.save('HomotopyResults/circular_latent.gif', fps=15)
+ani_latent.save('HomotopyResults/Trefoil/circular_latent.gif', fps=15)
 
 print("Results Saved!")
 
