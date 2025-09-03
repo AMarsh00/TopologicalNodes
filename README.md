@@ -6,7 +6,7 @@ I want examples, downloadable code packages, and source code on here
 
 Final update to add paper once it is done
 
-Release
+Release (make branch for just packaged useable code)
 
 Talk about everything in here:
 
