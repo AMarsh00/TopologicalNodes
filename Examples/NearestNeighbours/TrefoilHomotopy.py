@@ -1,5 +1,5 @@
 """
-Trefoil Homotopy.py
+TrefoilHomotopy.py
 Alexander Marsh
 Last Modified 03 September 2025
 
