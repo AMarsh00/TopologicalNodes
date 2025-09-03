@@ -7,3 +7,6 @@ I want examples, downloadable code packages, and source code on here
 Final update to add paper once it is done
 
 Release
+
+Talk about everything in here:
+Currently Trefoil Homotopy.py and outputs
