@@ -8,6 +8,6 @@ Final update to add paper once it is done
 
 Release (make branch for just packaged useable code)
 
-Talk about everything in here:
+Talk about everything in the github
 
-Currently Trefoil Homotopy.py and outputs
+Link every example
