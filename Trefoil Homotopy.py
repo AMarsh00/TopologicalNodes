@@ -30,8 +30,7 @@ SAVE_RESULTS = True   # Should we save results to the disk? (not advised for sma
 SHOW_RESULTS = True   # Should we animate our results? (not advised for large amounts of epochs)
 ALPHA = 10            # Scaling factor for our exponential penalty - higher alpha means faster convergence, but more risk of exploding gradients
 
-import numpy as np
-import torch
+# --- Knots ---
 
 def Trefoil(npts=126):
     t = np.linspace(-np.pi, np.pi, npts, endpoint=False)
