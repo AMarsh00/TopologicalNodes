@@ -134,7 +134,7 @@ data_train, data_test, knot_name = Trefoil(126)
 
 if SAVE_RESULTS == True:
     # Ensure the directory we want to save results to exists
-    os.makedirs("HomotopyResults/{knot_name}", exist_ok=True)
+    os.makedirs(f"HomotopyResults/{knot_name}", exist_ok=True)
 
 # --- Model Definitions ---
 
