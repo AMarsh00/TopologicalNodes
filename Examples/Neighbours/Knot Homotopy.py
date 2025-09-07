@@ -291,7 +291,7 @@ plt.figure()
 plt.plot(latent[:, 0].numpy(), latent[:, 1].numpy())
 plt.title('Latent Space Representation - Test Data')
 if SAVE_RESULTS == True:
-    plt.savefig('HomotopyResults/{knot_name}/LatentTestData.png')
+    plt.savefig(f'HomotopyResults/{knot_name}/LatentTestData.png')
 if SHOW_RESULTS == True:
     plt.show()
 
@@ -312,7 +312,7 @@ ax.scatter(data_test[:, 0], data_test[:, 1], data_test[:, 2], c='g', label='Test
 ax.set_title('Original vs Reconstructed 3D Data (Test Data)')
 ax.legend()
 if SAVE_RESULTS == True:
-    plt.savefig('HomotopyResults/{knot_name}/ReconstructedTestData.png')
+    plt.savefig(f'HomotopyResults/{knot_name}/ReconstructedTestData.png')
 if SHOW_RESULTS == True:
     plt.show()
 
@@ -348,7 +348,7 @@ def update_3d(epoch):
 
 ani_3d = FuncAnimation(fig_3d, update_3d, frames=range(0, len(keeplatent), 10), interval=100, repeat=True)
 if SAVE_RESULTS == True:
-    ani_3d.save('HomotopyResults/{knot_name}/reconstruction.gif', fps=15)
+    ani_3d.save(f'HomotopyResults/{knot_name}/reconstruction.gif', fps=15)
 
 # --- 2D Animation Utility Function ---
 def animate_latent_space(fig, ax, latent_data_seq, title):
@@ -373,7 +373,7 @@ def animate_latent_space(fig, ax, latent_data_seq, title):
 fig_latent, ax_latent = plt.subplots()
 ani_latent = animate_latent_space(fig_latent, ax_latent, keeplatent, 'Latent Space')
 if SAVE_RESULTS == True:
-    ani_latent.save('HomotopyResults/{knot_name}/latent.gif', fps=15)
+    ani_latent.save(f'HomotopyResults/{knot_name}/latent.gif', fps=15)
 
     print("Results Saved!")
 
