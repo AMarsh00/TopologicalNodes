@@ -324,9 +324,9 @@ if __name__ == "__main__":
     #data, knot_name = generate_sixfoil_knot_tensor(HP['n_points_per_knot'])
     #data, knot_name = generate_torus_knot_3_2_tensor(HP['n_points_per_knot'])
     #data, knot_name = generate_torus_knot_5_3_tensor(HP['n_points_per_knot'])
-    #data, knot_name = generate_unlinked_circles_tensor(HP['n_points_per_knot'])
+    #data, knot_name = generate_unlinked_circles_tensor(HP['n_points_per_knot']) # Not a knot, but shows that two separate things stay separate
     #data, knot_name = generate_simple_circle_tensor(HP['n_points_per_knot'])
-    #data, knot_name = generate_spiral_tensor(HP['n_points_per_knot'])
+    #data, knot_name = generate_spiral_tensor(HP['n_points_per_knot']) # Not a knot
     
     data = data.to(device)
 
