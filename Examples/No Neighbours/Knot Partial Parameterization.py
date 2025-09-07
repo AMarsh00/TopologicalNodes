@@ -278,7 +278,7 @@ def animate_all(data_xyz, snapshots_angles, snapshots_recon, snapshot_interval=5
     # --- Animated objects ---
     recon_scatter = axs[0].scatter([], [], [], s=10, c='red', alpha=0.7, label='Reconstruction')
     angle_scatter = axs[1].scatter([], [], s=10, c='green', alpha=0.7)
-    torus_scatter = axs[2].scatter([], [], [], s=10, c='cyan', alpha=0.7)
+    torus_scatter = axs[2].scatter([], [], [], s=10, c='red', alpha=0.7)
 
     axs[0].legend(loc='upper right')
     epoch_text = fig.text(0.5, 0, "", ha='center', fontsize=14)
