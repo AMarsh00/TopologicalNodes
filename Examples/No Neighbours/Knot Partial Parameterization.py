@@ -174,7 +174,7 @@ class TorusAutoencoder(nn.Module):
         self.return_layer = nn.Linear(hidden_dim, latent_dim)
         self.weights = nn.Parameter(torch.zeros(latent_dim))
 
-    # Set target geometry of a cylinder
+    # Set target geometry of a torus
     def normalize_z2(self, z2):
         z2 = z2 - z2.mean(dim=0, keepdim=True)
         vec2d = F.normalize(z2[:, :2], dim=1)
