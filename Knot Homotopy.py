@@ -1,7 +1,7 @@
 """
-Trefoil Homotopy.py
+Knot Homotopy.py
 Alexander Marsh
-Last Edit 05 September 2025
+Last Edit 07 September 2025
 
 GNU Affero General Public License
 
