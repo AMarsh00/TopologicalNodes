@@ -88,26 +88,7 @@ def generate_sixfoil_knot_tensor(n_points=50):
     knot = np.stack([x, y, z], axis=1)
     np.random.shuffle(knot)
     return torch.tensor(knot, dtype=torch.float32), "sixfoil"
-
-def generate_hopf_link_tensor(n_points=50):
-    """Generate points on a Hopf link (two linked circles)."""
-    t = np.linspace(0, 2 * np.pi, n_points, endpoint=False)
-    # First circle in xy-plane
-    x1 = np.cos(t)
-    y1 = np.sin(t)
-    z1 = np.zeros_like(t)
-    circle1 = np.stack([x1, y1, z1], axis=1)
-
-    # Second circle in xz-plane, shifted in y
-    x2 = np.cos(t)
-    y2 = np.ones_like(t) * 1.5
-    z2 = np.sin(t)
-    circle2 = np.stack([x2, y2, z2], axis=1)
-
-    link = np.concatenate([circle1, circle2], axis=0)
-    np.random.shuffle(link)
-    return torch.tensor(link, dtype=torch.float32), "hopf"
-
+    
 def generate_torus_knot_3_2_tensor(n_points=50):
     """Generate points on a (3,2) torus knot."""
     t = np.linspace(0, 2 * np.pi, n_points, endpoint=False)
@@ -341,7 +322,6 @@ if __name__ == "__main__":
     #data, knot_name = generate_figure_eight_knot_tensor(HP['n_points_per_knot'])
     #data, knot_name = generate_pentafoil_knot_tensor(HP['n_points_per_knot'])
     #data, knot_name = generate_sixfoil_knot_tensor(HP['n_points_per_knot'])
-    #data, knot_name = generate_hopf_link_tensor(HP['n_points_per_knot'])
     #data, knot_name = generate_torus_knot_3_2_tensor(HP['n_points_per_knot'])
     #data, knot_name = generate_torus_knot_5_3_tensor(HP['n_points_per_knot'])
     #data, knot_name = generate_unlinked_circles_tensor(HP['n_points_per_knot'])
