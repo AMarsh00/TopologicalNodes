@@ -9,6 +9,8 @@ A pytorch implementation of a topology-based autoencoder that learns parameteriz
 You can choose which knot to run easily by uncommenting whichever one you want and commenting out the rest.
 Caveat Emptor - you will have to adjust hyperparameters for all knots besides the trefoil. Generally more ugly knots require more epochs and possibly a lower alpha.
 Examples have already been generated for all of the knot datasets and are viewable on GitHub.
+
+This takes ordered data as the input, so we are not computing nearest neighbours at each step.
 """
 
 import os
