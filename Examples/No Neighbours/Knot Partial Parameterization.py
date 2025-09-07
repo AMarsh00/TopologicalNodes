@@ -37,7 +37,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # --- Hyperparameters ---
 HP = {
     'n_points_per_knot': 50,
-    'epochs': 10000,
+    'epochs': 100000,
     'lr': 1e-3,
     'snapshot_interval': 200,
     'animation_interval_ms': 200,
