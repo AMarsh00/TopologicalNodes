@@ -125,17 +125,6 @@ def generate_trefoil_knot_tensor(n_points=50):
     return torch.tensor(knot, dtype=torch.float32), "trefoil_knot"
 
 
-def generate_figure_eight_knot_tensor(n_points=50):
-    """Figure-eight knot."""
-    t = np.linspace(0, 2*np.pi, n_points, endpoint=False)
-    x = (2 + np.cos(2*t)) * np.cos(3*t)
-    y = (2 + np.cos(2*t)) * np.sin(3*t)
-    z = np.sin(4*t)
-    knot = np.stack([x, y, z], axis=1)
-    np.random.shuffle(knot)
-    return torch.tensor(knot, dtype=torch.float32), "figure_eight_knot"
-
-
 def generate_unlinked_two_ellipses_tensor(n_points=50):
     """Two unlinked ellipses in different planes."""
     t = np.linspace(0, 2*np.pi, n_points, endpoint=False)
@@ -423,7 +412,6 @@ if __name__ == "__main__":
     #data, dataset_name = generate_linked_circles_chain_tensor(HP['n_points_per_circle'], n_links=3)
     #data, dataset_name = generate_linked_circles_chain_tensor(HP['n_points_per_circle'], n_links=5) # Fail example because circles are too close and sampled too slowly
     #data, dataset_name = generate_trefoil_knot_tensor(HP['n_points_per_circle'])
-    #data, dataset_name = generate_figure_eight_knot_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_unlinked_two_ellipses_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_linked_two_ellipses_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_unlinked_circles_far_tensor(HP['n_points_per_circle'])
