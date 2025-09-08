@@ -203,24 +203,51 @@ def generate_unlinked_circles_far_tensor(n_points=50):
 
 
 def generate_trefoil_with_linked_circle_tensor(n_points=50):
-    """Trefoil knot with a linked circle nearby."""
+    """
+    Generate a trefoil knot and a genuinely linked circle in 3D.
+
+    Returns:
+        torch.Tensor: (2 * n_points, 3) point cloud
+        str: "linked_trefoil_and_circle"
+    """
     t = np.linspace(0, 2*np.pi, n_points, endpoint=False)
 
-    # Trefoil
-    x_t = np.sin(t) + 2*np.sin(2*t)
-    y_t = np.cos(t) - 2*np.cos(2*t)
-    z_t = -np.sin(3*t)
-    trefoil = np.stack([x_t, y_t, z_t], axis=1)
+    # Trefoil knot (classic parametric equations)
+    x1 = np.sin(t) + 2*np.sin(2*t)
+    y1 = np.cos(t) - 2*np.cos(2*t)
+    z1 = -np.sin(3*t)
+    trefoil = np.stack([x1, y1, z1], axis=1)
 
-    # Circle linked near trefoil center (shifted)
-    x_c = np.cos(t) + 3
-    y_c = np.sin(t) + 3
-    z_c = np.zeros_like(t)
-    circle = np.stack([x_c, y_c, z_c], axis=1)
+    # Linked circle (carefully placed to wrap through trefoil)
+    # Circle in a tilted plane that goes around the knot's core
+    phi = np.linspace(0, 2*np.pi, n_points, endpoint=False)
+    radius = 1.2  # Slightly larger radius to go through the knot
 
+    # Circle in the YZ plane (tilted)
+    x2 = np.zeros_like(phi)
+    y2 = radius * np.cos(phi)
+    z2 = radius * np.sin(phi)
+
+    # Stack and rotate + translate to loop through the trefoil
+    circle = np.stack([x2, y2, z2], axis=1)
+
+    # Rotate circle into position
+    theta = np.pi / 4  # 45 degrees tilt
+    R_x = np.array([
+        [1, 0, 0],
+        [0, np.cos(theta), -np.sin(theta)],
+        [0, np.sin(theta), np.cos(theta)],
+    ])
+    circle = circle @ R_x.T
+
+    # Translate to center of trefoil
+    circle += np.array([0, 0, 0])  # Adjust if needed
+
+    # Combine and shuffle
     points = np.concatenate([trefoil, circle], axis=0)
     np.random.shuffle(points)
-    return torch.tensor(points, dtype=torch.float32), "trefoil_with_linked_circle"
+
+    return torch.tensor(points, dtype=torch.float32), "linked_trefoil_and_circle"
 
 
 # --- Model Definition ---
