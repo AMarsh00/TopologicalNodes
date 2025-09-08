@@ -1,4 +1,4 @@
-TODO: WRITE THIS
+TODO: WRITE THIS (include walkthrough for how to compile the source code)
 
 Note - Source_Code folder is just source code, does not need to be downloaded... It should already be all compiled and ready in the Download folder
 
