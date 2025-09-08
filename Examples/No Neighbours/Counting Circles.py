@@ -202,29 +202,6 @@ def generate_unlinked_circles_far_tensor(n_points=50):
     return torch.tensor(points, dtype=torch.float32), "unlinked_circles_far"
 
 
-def generate_linked_two_circles_tilted_tensor(n_points=50):
-    """Two linked circles with one tilted in space."""
-    t = np.linspace(0, 2*np.pi, n_points, endpoint=False)
-
-    # Circle 1 in xy-plane
-    x1 = np.cos(t)
-    y1 = np.sin(t)
-    z1 = np.zeros_like(t)
-
-    # Circle 2 tilted 45 deg around x axis and shifted in y
-    angle = np.pi / 4
-    x2 = np.cos(t)
-    y2 = np.cos(angle)*np.ones_like(t)*2 - np.sin(angle)*np.sin(t)
-    z2 = np.sin(angle)*np.ones_like(t)*2 + np.cos(angle)*np.sin(t)
-
-    circle1 = np.stack([x1, y1, z1], axis=1)
-    circle2 = np.stack([x2, y2, z2], axis=1)
-
-    points = np.concatenate([circle1, circle2], axis=0)
-    np.random.shuffle(points)
-    return torch.tensor(points, dtype=torch.float32), "linked_circles_tilted"
-
-
 def generate_trefoil_with_linked_circle_tensor(n_points=50):
     """Trefoil knot with a linked circle nearby."""
     t = np.linspace(0, 2*np.pi, n_points, endpoint=False)
@@ -418,15 +395,14 @@ def plot_angles_and_original_data(angles, original_data, components, path):
 # --- Main ---
 if __name__ == "__main__":
     # Generate Data
-    #data, dataset_name = generate_unlinked_circles_tensor(HP['n_points_per_circle'])
+    data, dataset_name = generate_unlinked_circles_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_hopf_link_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_linked_circles_chain_tensor(HP['n_points_per_circle'], n_links=3)
     #data, dataset_name = generate_linked_circles_chain_tensor(HP['n_points_per_circle'], n_links=5) # Fail example because circles are too close and sampled too slowly
     #data, dataset_name = generate_trefoil_knot_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_unlinked_two_ellipses_tensor(HP['n_points_per_circle'])
-    data, dataset_name = generate_linked_two_ellipses_tensor(HP['n_points_per_circle'])
+    #data, dataset_name = generate_linked_two_ellipses_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_unlinked_circles_far_tensor(HP['n_points_per_circle'])
-    #data, dataset_name = generate_linked_two_circles_tilted_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_trefoil_with_linked_circle_tensor(HP['n_points_per_circle'])
     
     data = data.to(device)
