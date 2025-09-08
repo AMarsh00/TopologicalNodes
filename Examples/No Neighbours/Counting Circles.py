@@ -203,13 +203,6 @@ def generate_unlinked_circles_far_tensor(n_points=50):
 
 
 def generate_trefoil_with_linked_circle_tensor(n_points=50):
-    """
-    Generate a trefoil knot and a genuinely linked circle in 3D.
-
-    Returns:
-        torch.Tensor: (2 * n_points, 3) point cloud
-        str: "linked_trefoil_and_circle"
-    """
     t = np.linspace(0, 2*np.pi, n_points, endpoint=False)
 
     # Trefoil knot (classic parametric equations)
@@ -247,7 +240,7 @@ def generate_trefoil_with_linked_circle_tensor(n_points=50):
     points = np.concatenate([trefoil, circle], axis=0)
     np.random.shuffle(points)
 
-    return torch.tensor(points, dtype=torch.float32), "linked_trefoil_and_circle"
+    return torch.tensor(points, dtype=torch.float32), "trefoil_with_linked_circle"
 
 
 # --- Model Definition ---
