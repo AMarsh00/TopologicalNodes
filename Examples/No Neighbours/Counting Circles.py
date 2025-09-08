@@ -125,6 +125,17 @@ def generate_trefoil_knot_tensor(n_points=50):
     return torch.tensor(knot, dtype=torch.float32), "trefoil_knot"
 
 
+def generate_figure_eight_knot_tensor(n_points=50):
+    """Figure-eight knot."""
+    t = np.linspace(0, 2*np.pi, n_points, endpoint=False)
+    x = (2 + np.cos(2*t)) * np.cos(3*t)
+    y = (2 + np.cos(2*t)) * np.sin(3*t)
+    z = np.sin(4*t)
+    knot = np.stack([x, y, z], axis=1)
+    np.random.shuffle(knot)
+    return torch.tensor(knot, dtype=torch.float32), "figure_eight_knot"
+
+
 def generate_unlinked_two_ellipses_tensor(n_points=50):
     """Two unlinked ellipses in different planes."""
     t = np.linspace(0, 2*np.pi, n_points, endpoint=False)
@@ -157,8 +168,8 @@ def generate_linked_two_ellipses_tensor(n_points=50):
     z1 = np.zeros_like(t)
 
     # Ellipse 2 in yz-plane, shifted in x
-    x2 = np.ones_like(t) * 2.5
-    y2 = 1.5 * np.cos(t)
+    x2 = np.zeros_like(t)
+    y2 = 1.5 * np.cos(t)+1
     z2 = 0.75 * np.sin(t)
 
     ellipse1 = np.stack([x1, y1, z1], axis=1)
@@ -407,13 +418,13 @@ def plot_angles_and_original_data(angles, original_data, components, path):
 # --- Main ---
 if __name__ == "__main__":
     # Generate Data
-    data, dataset_name = generate_unlinked_circles_tensor(HP['n_points_per_circle'])
+    #data, dataset_name = generate_unlinked_circles_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_hopf_link_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_linked_circles_chain_tensor(HP['n_points_per_circle'], n_links=3)
     #data, dataset_name = generate_linked_circles_chain_tensor(HP['n_points_per_circle'], n_links=5) # Fail example because circles are too close and sampled too slowly
     #data, dataset_name = generate_trefoil_knot_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_unlinked_two_ellipses_tensor(HP['n_points_per_circle'])
-    #data, dataset_name = generate_linked_two_ellipses_tensor(HP['n_points_per_circle'])
+    data, dataset_name = generate_linked_two_ellipses_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_unlinked_circles_far_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_linked_two_circles_tilted_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_trefoil_with_linked_circle_tensor(HP['n_points_per_circle'])
@@ -468,7 +479,7 @@ if __name__ == "__main__":
     plt.show()
 
     # Adjacency matrix to separate lines
-    adj = adjacency_from_torus(angles, threshold=0.25) # If your dataset is larger, you want a smaller threshold
+    adj = adjacency_from_torus(angles, threshold=0.5) # If your dataset is larger, you want a smaller threshold
     num_components = get_connected_components(adj)
 
     print(f"Number of connected components: {num_components}")
