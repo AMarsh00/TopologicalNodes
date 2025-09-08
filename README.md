@@ -10,6 +10,6 @@ Release (make branch for just packaged useable code)
 
 Talk about everything in the github
 
-Link every example
+Link every example (knot homotopy, manifold homotopy left)
 
-Add results for Knot Homotopy
+Add results for Knot Homotopy, manifold homotopy
