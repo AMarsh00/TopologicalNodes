@@ -1,7 +1,7 @@
 """
-Knot Homotopy.py
+Trefoil Homotopy.py
 Alexander Marsh
-Last Edit 07 September 2025
+Last Edit 09 September 2025
 
 GNU Affero General Public License
 
@@ -9,8 +9,6 @@ A pytorch implementation of a topology-based autoencoder that learns parameteriz
 You can choose which knot to run easily by uncommenting whichever one you want and commenting out the rest.
 Caveat Emptor - you will have to adjust hyperparameters for all knots besides the trefoil. Generally more ugly knots require more epochs and possibly a lower alpha.
 Examples have already been generated for all of the knot datasets and are viewable on GitHub.
-
-This takes ordered data as the input, so we are not computing nearest neighbours at each step.
 """
 
 import os
@@ -22,7 +20,7 @@ from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d import Axes3D
 
 # --- Hyperparameters ---
-EPOCHS = 5000
+EPOCHS = 25000
 INPUT_DIM = 3         # 3D points input
 HIDDEN_DIM = 20       # Hidden layer size
 PRE_LATENT_DIM = 4    # Pre-latent dimension (4D)
@@ -31,8 +29,6 @@ NUM_HIDDEN_LAYERS = 0 # Number of Hidden Layers (none are needed)
 SAVE_RESULTS = True   # Should we save results to the disk? (not advised for small amounts of epochs)
 SHOW_RESULTS = True   # Should we animate our results? (not advised for large amounts of epochs)
 ALPHA = 10            # Scaling factor for our exponential penalty - higher alpha means faster convergence, but more risk of exploding gradients
-
-# --- Knots ---
 
 def Trefoil(npts=126):
     t = np.linspace(-np.pi, np.pi, npts, endpoint=False)
@@ -56,28 +52,6 @@ def TorusKnot(npts=126, p=3, q=4):
     yt = np.sin(q * t_shift) * (2 + np.cos(p * t_shift))
     zt = np.sin(p * t_shift)
     return torch.FloatTensor(np.vstack((x, y, z)).T), torch.FloatTensor(np.vstack((xt, yt, zt)).T), "TorusKnot"
-
-def LissajousKnot(npts=6283, a=3, b=4, c=5, delta=np.pi/2):
-    t = np.linspace(-np.pi, np.pi, npts, endpoint=False)
-    x = np.sin(a * t + delta)
-    y = np.sin(b * t)
-    z = np.sin(c * t)
-    t_shift = t + np.pi * 2 / npts / 2
-    xt = np.sin(a * t_shift + delta)
-    yt = np.sin(b * t_shift)
-    zt = np.sin(c * t_shift)
-    return torch.FloatTensor(np.vstack((x, y, z)).T), torch.FloatTensor(np.vstack((xt, yt, zt)).T), "LissajousKnot"
-
-def FigureEight(npts=6283):
-    t = np.linspace(0, 2*np.pi, npts, endpoint=False)
-    x = (2 + np.cos(2 * t)) * np.cos(3 * t)
-    y = (2 + np.cos(2 * t)) * np.sin(3 * t)
-    z = np.sin(4 * t)
-    t_shift = t + np.pi * 2 / npts / 2
-    xt = (2 + np.cos(2 * t_shift)) * np.cos(3 * t_shift)
-    yt = (2 + np.cos(2 * t_shift)) * np.sin(3 * t_shift)
-    zt = np.sin(4 * t_shift)
-    return torch.FloatTensor(np.vstack((x, y, z)).T), torch.FloatTensor(np.vstack((xt, yt, zt)).T), "FigureEight"
 
 def Cinquefoil(npts=126):
     t = np.linspace(0, 2*np.pi, npts, endpoint=False)
@@ -123,14 +97,56 @@ def SimpleCircle(npts=126):
     zt = np.zeros_like(t_shift)
     return torch.FloatTensor(np.vstack((x, y, z)).T), torch.FloatTensor(np.vstack((xt, yt, zt)).T), "Circle"
 
+def StevedoreKnot(npts=126):
+    t = np.linspace(0, 2*np.pi, npts, endpoint=False)
+    x = (2 + np.cos(3*t)) * np.cos(2*t)
+    y = (2 + np.cos(3*t)) * np.sin(2*t)
+    z = np.sin(3*t)
+    t_shift = t + np.pi * 2 / npts / 2
+    xt = (2 + np.cos(3*t_shift)) * np.cos(2*t_shift)
+    yt = (2 + np.cos(3*t_shift)) * np.sin(2*t_shift)
+    zt = np.sin(3*t_shift)
+    return torch.FloatTensor(np.vstack((x, y, z)).T), torch.FloatTensor(np.vstack((xt, yt, zt)).T), "StevedoreKnot"
+
+def ThreeTwistKnot(npts=126):
+    t = np.linspace(0, 2*np.pi, npts, endpoint=False)
+    x = (2 + np.cos(3*t)) * np.cos(2*t)
+    y = (2 + np.cos(3*t)) * np.sin(2*t)
+    z = np.sin(3*t) + np.sin(6*t)/2
+    t_shift = t + np.pi * 2 / npts / 2
+    xt = (2 + np.cos(3*t_shift)) * np.cos(2*t_shift)
+    yt = (2 + np.cos(3*t_shift)) * np.sin(2*t_shift)
+    zt = np.sin(3*t_shift) + np.sin(6*t_shift)/2
+    return torch.FloatTensor(np.vstack((x, y, z)).T), torch.FloatTensor(np.vstack((xt, yt, zt)).T), "ThreeTwistKnot"
+
+def DragonKnot(npts=126):
+    t = np.linspace(0, 2*np.pi, npts, endpoint=False)
+    
+    # Complex radial pattern with layered frequencies
+    r = 2 + 0.5 * np.sin(5*t) + 0.3 * np.cos(7*t)
+    
+    # 3D parametric definition with nontrivial embedding
+    x = r * np.cos(3*t)
+    y = r * np.sin(2*t)
+    z = np.sin(4*t) + 0.2 * np.sin(9*t)
+
+    # Tangent-shifted version
+    t_shift = t + np.pi * 2 / npts / 2
+    r_shift = 2 + 0.5 * np.sin(5*t_shift) + 0.3 * np.cos(7*t_shift)
+    xt = r_shift * np.cos(3*t_shift)
+    yt = r_shift * np.sin(2*t_shift)
+    zt = np.sin(4*t_shift) + 0.2 * np.sin(9*t_shift)
+    
+    return torch.FloatTensor(np.vstack((10*x, 10*y, 10*z)).T), torch.FloatTensor(np.vstack((10*xt, 10*yt, 10*zt)).T), "DragonKnot"
+
 data_train, data_test, knot_name = Trefoil(126)
 #data_train, data_test, knot_name = TorusKnot(126)
-#data_train, data_test, knot_name = LissajousKnot(6283) # The ugliest dataset here, would only recommend with a very powerful machine
-#data_train, data_test, knot_name = FigureEight(6283)
-#data_train, data_test, knot_name = Cinquefoil(6283)
+#data_train, data_test, knot_name = Cinquefoil(126)
 #data_train, data_test, knot_name = PretzelKnot(126)
 #data_train, data_test, knot_name = Helix(126) # The Helix dataset is not actually a knot, but it has a cool visualization
 #data_train, data_test, knot_name = SimpleCircle(126) # More interesting than you think in how it reconstructs
+#data_train, data_test, knot_name = StevedoreKnot(126)
+#data_train, data_test, knot_name = ThreeTwistKnot(126)
 
 if SAVE_RESULTS == True:
     # Ensure the directory we want to save results to exists
@@ -263,6 +279,10 @@ for epoch in range(EPOCHS):
 
     loss = criterion(reconstructed, data_train)
     loss += coordinate_wise_order_penalty(pre_latent)
+
+    # Break if we got thrown off by large alpha
+    if loss >= 100000:
+        break
 
     optimizer_encoder.zero_grad()
     optimizer_decoder.zero_grad()
