@@ -1,3 +1,11 @@
+import os
+import numpy as np
+import torch
+import torch.nn.init as init
+import torchplot as plt
+from matplotlib.animation import FuncAnimation
+from mpl_toolkits.mplot3d import Axes3D
+
 def coordinate_wise_order_penalty(pre_latent, alpha=ALPHA):
     N, D = pre_latent.shape
 
