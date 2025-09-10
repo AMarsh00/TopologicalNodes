@@ -11,6 +11,7 @@
 #pragma once
 
 #include <torch/torch.h>
+#include <tuple>
 
 // Implementation of the LooseTopologicalNode module.
 // The `Impl` suffix is automatically handled by the TORCH_MODULE macro below.
@@ -28,7 +29,7 @@ public:
                              int num_hidden_layers, int hidden_layer_size);
 
     // Forward pass
-    torch::Tensor forward(torch::Tensor x);
+    std::tuple<torch::Tensor, torch::Tensor> forward(torch::Tensor x);
 
 private:
     // Utility to build encoder/decoder
