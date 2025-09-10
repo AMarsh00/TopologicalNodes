@@ -26,7 +26,7 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b %ERRORLEVEL%
 ) else (
     echo Build succeeded!
-    echo The extension was built as LooseTopologicalNode*.so
+    echo The extension was built as LooseTopologicalNode*.pyd
     echo You can now import it in Python if it's in the same folder as your script.
 )
 
