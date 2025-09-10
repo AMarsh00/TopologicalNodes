@@ -10,13 +10,6 @@ Python file that builds the c++ LibTorch module into a .so PyTorch module for Py
 
 from setuptools import setup
 from torch.utils.cpp_extension import CppExtension, BuildExtension
-import sys
-
-# Detect platform-specific compiler flags
-if sys.platform == 'win32':
-    extra_compile_args = ['/O2', '/std:c++17']  # MSVC optimization + C++17
-else:
-    extra_compile_args = ['-O3', '-std=c++17']  # GCC/Clang optimization + C++17
 
 setup(
     name='LooseTopologicalNode',
