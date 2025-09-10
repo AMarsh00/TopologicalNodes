@@ -16,7 +16,7 @@ REM ======================================================
 echo Building LooseTopologicalNode extension...
 
 REM Run the build script with the 'inplace' flag to output the .so file here
-python setup.py build_ext --inplace
+python Setup.py build_ext --inplace
 
 REM Check if the build succeeded
 if %ERRORLEVEL% NEQ 0 (
