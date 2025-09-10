@@ -40,6 +40,8 @@ std::vector<at::Tensor> LooseTopologicalNodeImpl::parameters() {
     for (auto& p : layer_params) {
         params.push_back(p);
     }
+    
+    return params;
 }
 
 // Build encoder-decoder architecture
