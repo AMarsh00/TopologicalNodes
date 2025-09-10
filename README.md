@@ -1,3 +1,15 @@
+<h1>Overview</h1>
+WRITE
+
+<h1>Examples</h1>
+WRITE
+
+<h1>Source Code</h1>
+WRITE
+
+<h1>Release</h1>
+WRITE
+
 TODO: WRITE THIS (include walkthrough for how to compile the source code)
 
 Note - Source_Code folder is just source code, does not need to be downloaded... It should already be all compiled and ready in the Download folder
@@ -12,8 +24,6 @@ Talk about everything in the github
 
 Link every example (knot homotopy, manifold homotopy left)
 
-Add results for Knot Homotopy, manifold homotopy
-
-Include python examples using my precompiled c++
+Add results for manifold homotopy
 
 Add a thing for how to build the source code (what is required, I have the .bat file)
