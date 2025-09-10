@@ -2,7 +2,17 @@
 WRITE
 
 <h1>Dependencies</h1>
-WRITE
+We only require the right python modules to be installed, and there aren't any linker things that need to be set up. Ninja is optional. If you want to compile your own `.pyd` or `.so` file, you need g++ (Linux) or MSVC (Windows).
+```bat
+py -m pip install torch
+py -m pip install numpy
+py -m pip install matplotlib
+py -m pip install sklearn
+py -m pip install networkx
+py -m pip install scipy
+py -m pip install libtorch
+py -m pip install ninja
+```
 
 <h1>Examples</h1>
 WRITE
