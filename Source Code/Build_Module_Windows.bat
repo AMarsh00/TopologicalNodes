@@ -6,7 +6,7 @@ REM ======================================================
 REM
 REM GNU Affero General Public License
 REM
-REM Build script for LooseTopologicalNode PyTorch extension in Windows. Needs to be run through Developer Command Prompt.
+REM Build script for LooseTopologicalNode PyTorch extension in Windows. Needs to be run through x64 Developer Command Prompt.
 REM ------------------------------------------------------
 REM - Compiles the C++/CUDA extension via setup.py
 REM - Places the .so file in the current directory
