@@ -15,3 +15,5 @@ Link every example (knot homotopy, manifold homotopy left)
 Add results for Knot Homotopy, manifold homotopy
 
 Include python examples using my precompiled c++
+
+Add a thing for how to build the source code (what is required, I have the .bat file)
