@@ -1,49 +1,124 @@
-<h1>Overview</h1>
-WRITE
+# 🔗 Topological Node Module
 
-<h1>Dependencies</h1>
-We only require the right python modules to be installed, and there aren't any linker things that need to be set up. Ninja is optional. If you want to compile your own `.pyd` or `.so` file, you need g++ (Linux) or MSVC (Windows).
+This repo contains the PyTorch and LibTorch implementations for everything described in the **Topological Node** paper — including both strict and loose node variants.
 
-    ```bat
-    py -m pip install torch
-    py -m pip install numpy
-    py -m pip install matplotlib
-    py -m pip install sklearn
-    py -m pip install networkx
-    py -m pip install scipy
-    py -m pip install libtorch
-    py -m pip install ninja
-    ```
+You’ll find Python and C++ code, examples, and precompiled binaries ready to use.
 
-<h1>Examples</h1>
-WRITE
+---
 
-<h1>Release</h1>
-The `Release` folder contains a python file with our strict node loss functions (`Strict Node Penalties.py`), a `.pyd` (Windows) and `.so` (Linux) pre-compiled version of our LooseTopologicalNode module, which can be used by `import LooseTopologicalNode` if the `.pyd` or `.so` file is in the same directory as your custom script. We have included an example (`Loose Node Example.py`) to illustrate how to use the LooseTopologicalNode module. One can simply download the latest Release of the project (under Releases) to get this easily.
+## 📦 What's Included
 
-<h1>Source Code</h1>
-In the `Source Code` folder, we have our C++ LibTorch implementation of the Loose Topological Node module and a PyBind11 wrapper for it.
+- PyTorch implementations of the topological node losses
+- A C++ `LibTorch` module (`LooseTopologicalNode`) with a PyBind11 wrapper
+- Precompiled `.pyd` / `.so` files for easy import in Python
+- Example scripts to help you get started
+- All algorithms from the paper, already implemented and ready to run
 
-These can be compiled:
+---
 
-- On **Linux** by running:
+## ⚙️ Dependencies
 
+No complex setup needed — just a few Python packages:
+
+```bash
+py -m pip install torch numpy matplotlib sklearn networkx scipy ninja
+```
+
+> 🔧 **Ninja** is optional but makes compilation faster.  
+> 🛠️ If you plan to compile the C++ module yourself, you’ll need:
+> - `g++` on Linux
+> - MSVC via the x64 Visual Studio Developer Command Prompt on Windows
+
+---
+
+## 🧪 Examples
+
+The [`Examples`](./Examples) folder contains working implementations of all algorithms from the paper.
+
+Each script saves its output in the same directory it's run from, so you can easily inspect results.
+
+---
+
+## 🚀 Release Folder
+
+The [`Release`](./Release) folder contains:
+
+- `Strict Node Penalties.py` — Python implementation of strict node loss
+- `LooseTopologicalNode.pyd` (Windows) / `LooseTopologicalNode.so` (Linux) — compiled C++ module
+- `Loose Node Example.py` — simple usage example for the loose module
+
+### 🔧 Using the Module
+
+If the compiled `.pyd` or `.so` file is in the same directory as your script, just import it like any other module:
+
+```python
+import LooseTopologicalNode
+```
+
+> 💡 You can also download the latest prebuilt files from the [Releases](../../releases) section on GitHub.
+
+---
+
+## 🛠️ Source Code & Building
+
+The [`Source Code`](./Source%20Code) folder includes:
+
+- The full C++ implementation of the `LooseTopologicalNode` module using LibTorch
+- A PyBind11 wrapper for Python integration
+- Build scripts for Windows and Linux
+
+### 🏗️ Building the Module
+
+Run the appropriate script from the `Source Code` folder:
+
+- **Linux**:
     ```bash
     ./Build_Module_Linux.bat
     ```
 
-- On **Windows** by running:
-
+- **Windows** (use the x64 Visual Studio Developer Command Prompt):
     ```bat
     Build_Module_Windows.bat
     ```
 
-> Run the Windows script in the **x64 Visual Studio Developer Command Prompt**.
+> ⚡ Using Ninja can speed up the build:
+> ```bash
+> py -m pip install ninja
+> ```
 
-We recommend using **Ninja** to compile faster (optional):
+### 🔍 Output
 
-```bash
-py -m pip install ninja
+After building, you'll get a `.so` or `.pyd` file in the `Release` folder — ready to be imported in Python:
+
+```python
+import LooseTopologicalNode
 ```
 
-After building, the output will be a `.so` or `.pyd` file that will match those in the `Release` folder. Our code is written for `C++ 17` and `Python 3.13` and will not necessarily run in other versions.
+> 📌 The code is written for **C++17** and **Python 3.13** — other versions might not work out of the box.
+
+---
+
+## 📁 Folder Structure
+
+```text
+.
+├── Release/
+│   ├── Strict Node Penalties.py
+│   ├── LooseTopologicalNode.pyd / .so
+│   └── Loose Node Example.py
+├── Source Code/
+│   ├── C++ implementation
+│   ├── PyBind11 wrapper
+│   └── Build scripts
+├── Examples/
+│   └── Algorithm implementations
+└── README.md
+```
+
+---
+
+## 📄 License
+
+[GNU Affero Public License](./LICENSE)
+
+---
