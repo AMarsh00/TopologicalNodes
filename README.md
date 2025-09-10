@@ -110,7 +110,9 @@ import LooseTopologicalNode
 │   └── Build scripts
 ├── Examples/
 │   └── Algorithm implementations
+|   └── Example Results
 └── README.md
+└── LICENSE
 ```
 
 ---
