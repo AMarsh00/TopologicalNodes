@@ -2,8 +2,6 @@
 
 This repo contains the PyTorch and LibTorch implementations for everything described in the **Topological Node** paper — including both strict and loose node variants.
 
-You’ll find Python and C++ code, examples, and precompiled binaries ready to use.
-
 ---
 
 ## Content
