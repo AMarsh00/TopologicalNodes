@@ -5,7 +5,7 @@ Last Edit 10 September 2025
 
 GNU Affero General Public License
 
-Python file that builds the c++ LibTorch module into a .so PyTorch module.
+Python file that builds the c++ LibTorch module into a .so PyTorch module for Python 3.13.
 """
 
 from setuptools import setup
