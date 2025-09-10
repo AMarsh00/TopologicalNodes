@@ -21,6 +21,27 @@ LooseTopologicalNodeImpl::LooseTopologicalNodeImpl(float leak_factor, int input_
     build_layers(leak_factor, input_dim, output_dim, num_hidden_layers, hidden_layer_size);
 }
 
+std::vector<at::Tensor> LooseTopologicalNodeImpl::parameters() {
+    std::vector<at::Tensor> params;
+
+    for (auto& layer : encoder_layers->children()) {
+        auto layer_params = layer->parameters();
+        for (auto& p : layer_params) {
+            params.push_back(p);
+        }
+    }
+    for (auto& layer : decoder_layers->children()) {
+        auto layer_params = layer->parameters();
+        for (auto& p : layer_params) {
+            params.push_back(p);
+        }
+    }
+    auto layer_params = skip_weight->parameters();
+    for (auto& p : layer_params) {
+        params.push_back(p);
+    }
+}
+
 // Build encoder-decoder architecture
 void LooseTopologicalNodeImpl::build_layers(float leak_factor, int input_dim, int output_dim, int num_hidden_layers, int hidden_layer_size) {
     encoder_layers = torch::nn::Sequential();
