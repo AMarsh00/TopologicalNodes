@@ -37,6 +37,8 @@ private:
 
     // Normalize latent vector to live on S¹ × S¹ (torus)
     torch::Tensor normalize_to_torus(torch::Tensor z);
+    // Get the angle representation of data for return
+    torch::Tensor angle_layer(const torch::Tensor& z2);
 };
 
 // Creates a shared_ptr wrapper around the implementation class
