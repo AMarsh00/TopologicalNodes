@@ -26,7 +26,7 @@ PYBIND11_MODULE(LooseTopologicalNode, m) {
         .def("forward", &LooseTopologicalNodeImpl::forward, "Run forward pass through encoder, torus projection, and decoder");
 
     // Bind the module holder (wrapper for use like a standard torch.nn module in Python)
-    py::class_<LooseTopologicalNode, torch::nn::ModuleHolder<LooseTopologicalNodeImpl>>(m, "LooseTopologicalNode")
+    py::class_<LooseTopologicalNode, std::shared_ptr<LooseTopologicalNode>>(m, "LooseTopologicalNode")
         .def(py::init<int, int>(), "Simplified constructor (input_dim, output_dim)")
         .def(py::init<float, int, int, int, int>(), "Full constructor (leak_factor, input_dim, output_dim, num_hidden_layers, hidden_layer_size)")
         .def("forward", [](LooseTopologicalNode& self, torch::Tensor x) {
