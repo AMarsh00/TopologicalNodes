@@ -19,7 +19,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 
-from itertools import combinations
 from sklearn.neighbors import NearestNeighbors
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
