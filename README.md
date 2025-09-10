@@ -21,7 +21,7 @@ You’ll find Python and C++ code, examples, and precompiled binaries ready to u
 No complex setup needed — just a few Python packages:
 
 ```bash
-py -m pip install torch numpy matplotlib sklearn networkx scipy ninja
+py -m pip install torch numpy matplotlib sklearn networkx scipy ninja libtorch
 ```
 
 > **Ninja** is optional but makes compilation faster.  
