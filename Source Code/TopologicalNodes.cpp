@@ -62,7 +62,7 @@ void LooseTopologicalNodeImpl::build_layers(float leak_factor, int input_dim, in
 }
 
 // Normalize 4D vector to torus: first 2 dims to S¹, next 2 dims to S¹
-torch::Tensor normalize_to_torus(torch::Tensor z) {
+torch::Tensor LooseTopologicalNodeImpl::normalize_to_torus(torch::Tensor z) {
     // Normalize first 2 dimensions (xy)
     auto xy = z.narrow(1, 0, 2);
     auto xy_norm = xy.norm(2, 1, true).clamp_min(1e-8);
@@ -76,7 +76,7 @@ torch::Tensor normalize_to_torus(torch::Tensor z) {
     return z;
 }
 
-torch::Tensor angle_layer(const torch::Tensor& z2) {
+torch::Tensor LooseTopologicalNodeImpl::angle_layer(const torch::Tensor& z2) {
     // Assumes z2 is of shape [batch_size, 4]
     auto angle_2d = torch::atan2(z2.select(1, 1), z2.select(1, 0));
     auto angle_3d = torch::atan2(z2.select(1, 3), z2.select(1, 2));
@@ -84,7 +84,7 @@ torch::Tensor angle_layer(const torch::Tensor& z2) {
     return torch::stack({angle_2d, angle_3d}, 1); // Shape: [batch_size, 2]
 }
 
-// Forward pass: encode -> skip -> normalize -> decode
+// Forward pass: encode >> skip >> normalize >> decode
 torch::Tensor LooseTopologicalNodeImpl::forward(torch::Tensor x) {
     auto z = encoder_layers->forward(x);                                       // Encode to latent space (4D)
     auto post_skip_z = z + skip_weight->forward(torch::abs(z));                // Apply learnable skip connection
