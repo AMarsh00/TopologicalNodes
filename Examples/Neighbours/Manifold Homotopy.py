@@ -1,7 +1,7 @@
 """
 Manifold Homotopy.py
 Alexander Marsh
-Last Edit 09 September 2025
+Last Edit 10 September 2025
 
 GNU Affero General Public License
 
@@ -21,7 +21,6 @@ import random
 
 from sklearn.neighbors import NearestNeighbors
 from matplotlib.animation import FuncAnimation
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 # === Hyperparameters ===
 EPOCHS = 100000
