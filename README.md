@@ -33,9 +33,7 @@ py -m pip install torch numpy matplotlib sklearn networkx scipy ninja
 
 ## Examples
 
-The [`Examples`](./Examples) folder contains working implementations of all algorithms from the paper.
-
-Each script saves its output in the same directory it's run from, so you can easily inspect results.
+The [`Examples`](./Examples) folder contains working implementations of all algorithms from the paper and example results.
 
 ---
 
