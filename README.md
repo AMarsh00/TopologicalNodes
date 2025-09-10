@@ -45,7 +45,7 @@ The [`Release`](./Release) folder contains:
 
 ### Using the Module
 
-If the compiled `.pyd` or `.so` file is in the same directory as your script, just import it like any other module:
+If the compiled `.pyd` or `.so` file is in the same directory as your script, just import it:
 
 ```python
 import LooseTopologicalNode
@@ -84,11 +84,7 @@ Run the appropriate script from the `Source Code` folder:
 
 ### Output
 
-After building, you'll get a `.so` or `.pyd` file in the `Release` folder that can imported in Python:
-
-```python
-import LooseTopologicalNode
-```
+After building, you'll get a `.so` or `.pyd` file that matches the ones in the `Release` folder.
 
 > The code is written for **C++17** and **Python 3.13** — other versions may not work without re-compiling our binaries to work better with the other versions.
 
