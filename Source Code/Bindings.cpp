@@ -15,27 +15,14 @@
 
 namespace py = pybind11;
 
-// PyTorch extension module definition
 PYBIND11_MODULE(LooseTopologicalNode, m) {
     m.doc() = "LooseTopologicalNode PyTorch C++ extension module";
 
-    // Bind the core implementation (inherits torch::nn::Module)
-    py::class_<LooseTopologicalNodeImpl, torch::nn::Module, std::shared_ptr<LooseTopologicalNodeImpl>>(m, "LooseTopologicalNodeImpl")
-        .def(py::init<int, int>(), "Simplified constructor (input_dim, output_dim)")
-        .def(py::init<float, int, int, int, int>(), "Full constructor (leak_factor, input_dim, output_dim, num_hidden_layers, hidden_layer_size)")
-        .def("forward", &LooseTopologicalNodeImpl::forward, "Run forward pass through encoder, torus projection, and decoder")
-        .def("parameters", [](const LooseTopologicalNodeImpl &self) {  // forward parameters call
-            return self.parameters();
-        });
-
-    // Bind the module holder (wrapper for use like a standard torch.nn module in Python)
+    // Bind the module holder (this is what Python will use)
     py::class_<LooseTopologicalNode, std::shared_ptr<LooseTopologicalNode>>(m, "LooseTopologicalNode")
         .def(py::init<int, int>(), "Simplified constructor (input_dim, output_dim)")
         .def(py::init<float, int, int, int, int>(), "Full constructor (leak_factor, input_dim, output_dim, num_hidden_layers, hidden_layer_size)")
         .def("forward", [](LooseTopologicalNode& self, torch::Tensor x) {
             return self->forward(x);
-        }, "Forward method (calls Impl internally)")
-        .def("parameters", [](const LooseTopologicalNode &self) {  // forward parameters call
-            return self->parameters();
-        });
+        }, "Forward pass through the module");
 }
