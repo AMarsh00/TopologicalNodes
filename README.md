@@ -94,7 +94,7 @@ After building, you'll get a `.so` or `.pyd` file in the `Release` folder — re
 import LooseTopologicalNode
 ```
 
-> The code is written for **C++17** and **Python 3.13** — other versions might not work out of the box.
+> The code is written for **C++17** and **Python 3.13** — other versions may not work without re-compiling our binaries to work better with the other versions.
 
 ---
 
