@@ -11,16 +11,28 @@ WRITE
 WRITE
 
 <h1>Source Code</h1>
-In the Source Code folder, we have our C++ LibTorch implementation of the Loose Topological Node module and a PyBind11 wrapper for it. These can be compiled on Linux by running 
+In the `Source Code` folder, we have our C++ LibTorch implementation of the Loose Topological Node module and a PyBind11 wrapper for it.
+
+These can be compiled:
+
+- On **Linux** by running:
+
+    ```bash
+    ./Build_Module_Linux.bat
+    ```
+
+- On **Windows** by running:
+
+    ```bat
+    Build_Module_Windows.bat
+    ```
+
+> 💡 Run the Windows script in the **x64 Visual Studio Developer Command Prompt**.
+
+We recommend using **Ninja** to compile faster (optional):
+
 ```bash
-./Build_Module_Linux.bat
-``` 
-or on Windows by running 
-```bat
-Build_Module_Windows.bat
-```
-in the x64 Visual Studio Developer Command Prompt. We recommend using Ninja:
-```bat
 py -m pip install ninja
-``` 
-to compile faster, but not necessary. The output of this will be the .so or .pyd files found in the Release folder.
+```
+
+After building, the output `.so` or `.pyd` files will be found in the `Release` folder.
