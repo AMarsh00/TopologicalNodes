@@ -1,12 +1,12 @@
 @echo off
-REM Build_Module_Linux.bat
+REM Build_Module.bat
 REM Alexander Marsh
 REM Last Edit 10 September 2025
 REM ======================================================
 REM
 REM GNU Affero General Public License
 REM
-REM Build script for LooseTopologicalNode PyTorch extension in Linux
+REM Build script for LooseTopologicalNode PyTorch extension. LINUX Only.
 REM ------------------------------------------------------
 REM - Compiles the C++/CUDA extension via setup.py
 REM - Places the .so file in the current directory
