@@ -66,14 +66,22 @@ torch::Tensor LooseTopologicalNodeImpl::normalize_to_torus(torch::Tensor z) {
     // Normalize first 2 dimensions (xy)
     auto xy = z.narrow(1, 0, 2);
     auto xy_norm = xy.norm(2, 1, true).clamp_min(1e-8);
-    xy.div_(xy_norm);  // in-place normalization
+    auto xy_normalized = xy / xy_norm;  // out-of-place division
 
     // Normalize next 2 dimensions (uv)
     auto uv = z.narrow(1, 2, 2);
     auto uv_norm = uv.norm(2, 1, true).clamp_min(1e-8);
-    uv.div_(uv_norm);  // in-place normalization
+    auto uv_normalized = uv / uv_norm;  // out-of-place division
 
-    return z;
+    // Now create a new tensor that replaces those slices in z
+    // Because xy and uv are slices of z, we can't just assign new tensors to them.
+    // So let's clone z and overwrite those slices with normalized values:
+
+    auto z_normalized = z.clone();
+    z_normalized.narrow(1, 0, 2).copy_(xy_normalized);
+    z_normalized.narrow(1, 2, 2).copy_(uv_normalized);
+
+    return z_normalized;
 }
 
 torch::Tensor LooseTopologicalNodeImpl::angle_layer(const torch::Tensor& z2) {
@@ -85,9 +93,9 @@ torch::Tensor LooseTopologicalNodeImpl::angle_layer(const torch::Tensor& z2) {
 }
 
 // Forward pass: encode >> skip >> normalize >> decode
-torch::Tensor LooseTopologicalNodeImpl::forward(torch::Tensor x) {
+std::tuple<torch::Tensor, torch::Tensor> LooseTopologicalNodeImpl::forward(torch::Tensor x) {
     auto z = encoder_layers->forward(x);                                       // Encode to latent space (4D)
     auto post_skip_z = z + skip_weight->forward(torch::abs(z));                // Apply learnable skip connection
     auto normalized_z = normalize_to_torus(post_skip_z);                       // Push latent to 2-torus (S¹ × S¹)
-    return decoder_layers->forward(normalized_z), angle_layer(normalized_z);   // Decode back to output
+    return std::make_tuple(decoder_layers->forward(normalized_z), angle_layer(normalized_z));   // Decode back to output
 }
