@@ -12,6 +12,10 @@
 
 #include <torch/torch.h>
 #include <tuple>
+#include <vector>
+#include <iterator>
+
+using namespace std;
 
 // Implementation of the LooseTopologicalNode module.
 // The `Impl` suffix is automatically handled by the TORCH_MODULE macro below.
@@ -30,6 +34,7 @@ public:
 
     // Forward pass
     std::tuple<torch::Tensor, torch::Tensor> forward(torch::Tensor x);
+    std::vector<at::Tensor> parameters();
 
 private:
     // Utility to build encoder/decoder
