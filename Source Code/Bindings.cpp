@@ -26,11 +26,6 @@ PYBIND11_MODULE(LooseTopologicalNode, m) {
             return self->forward(x);
         }, "Forward pass through the module")
         .def("parameters", [](LooseTopologicalNodeImpl &self) {
-            auto params = self.parameters();
-            std::vector<torch::Tensor> param_list;
-            for (auto& p : params) {
-                param_list.push_back(p);
-            }
-            return param_list;
+            return self.parameters();
         });
 }
