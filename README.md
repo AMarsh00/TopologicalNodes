@@ -6,7 +6,7 @@ You’ll find Python and C++ code, examples, and precompiled binaries ready to u
 
 ---
 
-## What's Included
+## Content
 
 - PyTorch implementations of the topological node losses
 - A C++ `LibTorch` module (`LooseTopologicalNode`) with a PyBind11 wrapper
