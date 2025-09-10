@@ -24,5 +24,13 @@ PYBIND11_MODULE(LooseTopologicalNode, m) {
         .def(py::init<float, int, int, int, int>(), "Full constructor (leak_factor, input_dim, output_dim, num_hidden_layers, hidden_layer_size)")
         .def("forward", [](LooseTopologicalNode& self, torch::Tensor x) {
             return self->forward(x);
-        }, "Forward pass through the module");
+        }, "Forward pass through the module")
+        .def("parameters", [](LooseTopologicalNodeImpl &self) {
+            auto params = self.parameters();
+            std::vector<torch::Tensor> param_list;
+            for (auto& p : params) {
+                param_list.push_back(p);
+            }
+            return param_list;
+        });
 }
