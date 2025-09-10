@@ -1,7 +1,7 @@
 """
 Loose Node Example.py
 Alexander Marsh
-Last Edit: 07 September 2025
+Last Edit: 10 September 2025
 
 GNU Affero General Public License
 
@@ -23,12 +23,12 @@ from torch.nn import MSELoss
 import LooseTopologicalNode
 
 # --- Device setup ---
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("cpu")
 
 # --- Hyperparameters ---
 HP = {
     'n_points_per_knot': 50,
-    'epochs': 50000,
+    'epochs': 2000,
     'lr': 1e-3,
     'snapshot_interval': 200,
     'animation_interval_ms': 200,
@@ -47,16 +47,18 @@ def generate_trefoil_knot_tensor(n_points=50):
     np.random.shuffle(knot)
     return torch.tensor(knot, dtype=torch.float32), "trefoil"
 
-# --- Model Definition ---
-class TorusAutoencoder(nn.Module):
-    def __init__(self, input_dim=3, hidden_dim=HP['hidden_dim']):
+# --- Module Grabbed From C++ ---
+class PyLooseTopologicalNode(torch.nn.Module):
+    def __init__(self, input_dim=3, output_dim=3):
         super().__init__()
-        # Wrap your C++ module as part of the architecture
-        self.topo_node = LooseTopologicalNode.LooseTopologicalNode(input_dim, input_dim)
+        self.cpp_node = LooseTopologicalNode.LooseTopologicalNode(input_dim, output_dim)
+        # Note: do NOT do self.add_module("cpp_node", self.cpp_node)
 
     def forward(self, x):
-        recon, z_angles = self.topo_node.forward(x)       # C++ node provides 4D torus output
-        return recon, z_angles
+        return self.cpp_node.forward(x)
+
+    def parameters(self):
+        return self.cpp_node.parameters()
 
 # --- Training Loop with Snapshots ---
 def train_with_snapshots(model, data, epochs, lr, snapshot_interval):
@@ -80,8 +82,8 @@ def train_with_snapshots(model, data, epochs, lr, snapshot_interval):
 
 # --- Torus Mapping for Visualization ---
 def torus_from_latent(z, R=3.0, r=1.0):
-    theta = torch.atan2(z[:, 1], z[:, 0]).numpy()
-    phi = torch.atan2(z[:, 3], z[:, 2]).numpy()
+    theta = z[:, 0]
+    phi = z[:, 1]
 
     x = (R + r * np.cos(phi)) * np.cos(theta)
     y = (R + r * np.cos(phi)) * np.sin(theta)
@@ -90,7 +92,6 @@ def torus_from_latent(z, R=3.0, r=1.0):
 
 # --- Animation Utility ---
 def animate_all(data_xyz, snapshots, snapshot_interval, interval, save_path=None):
-    # Setup figure
     fig = plt.figure(figsize=(18, 5))
     axs = [
         fig.add_subplot(1, 3, 1, projection='3d'),
@@ -101,24 +102,30 @@ def animate_all(data_xyz, snapshots, snapshot_interval, interval, save_path=None
     for ax, title in zip(axs, titles):
         ax.set_title(title)
 
-    # Plot originals
     axs[0].scatter(*data_xyz.T, color='gray', s=10, alpha=0.5)
 
-    recon_scatter = axs[0].scatter([], [], [], color='red', s=10)
-    angle_scatter = axs[1].scatter([], [], color='green', s=10)
-    torus_scatter = axs[2].scatter([], [], [], color='blue', s=10)
+    # Initialize with first snapshot data to set correct shape
+    first_recon, first_z_torus = snapshots[0]
+    recon_scatter = axs[0].scatter(*first_recon.T, color='red', s=10)
+    angles = first_z_torus
+    angle_scatter = axs[1].scatter(angles[:, 0], angles[:, 1], color='green', s=10)
+    x_t, y_t, z_t = torus_from_latent(first_z_torus)
+    torus_scatter = axs[2].scatter(x_t, y_t, z_t, color='blue', s=10)
 
     epoch_text = fig.text(0.5, 0.01, "", ha='center')
 
     def update(idx):
         recon, z_torus = snapshots[idx]
-        angles = np.stack([
-            np.arctan2(z_torus[:, 1], z_torus[:, 0]),
-            np.arctan2(z_torus[:, 3], z_torus[:, 2])
-        ], axis=1)
 
-        recon_scatter._offsets3d = (*recon.T,)
+        # Update reconstruction scatter (3D)
+        xs, ys, zs = recon.T
+        recon_scatter._offsets3d = (xs, ys, zs)
+
+        # Update angle scatter (2D)
+        angles = z_torus.numpy()
         angle_scatter.set_offsets(angles)
+
+        # Update torus scatter (3D)
         x_t, y_t, z_t = torus_from_latent(z_torus)
         torus_scatter._offsets3d = (x_t, y_t, z_t)
 
@@ -126,6 +133,7 @@ def animate_all(data_xyz, snapshots, snapshot_interval, interval, save_path=None
         return recon_scatter, angle_scatter, torus_scatter, epoch_text
 
     anim = FuncAnimation(fig, update, frames=len(snapshots), interval=interval, blit=False)
+
     if save_path:
         anim.save(save_path, writer='pillow', fps=1000 // interval)
 
@@ -143,7 +151,7 @@ if __name__ == "__main__":
     else:
         save_path = None
 
-    model = TorusAutoencoder().to(device)
+    model = PyLooseTopologicalNode().to(device)
     snapshots = train_with_snapshots(
         model, data, HP['epochs'], HP['lr'], HP['snapshot_interval']
     )
