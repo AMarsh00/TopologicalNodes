@@ -27,7 +27,7 @@ These can be compiled:
     Build_Module_Windows.bat
     ```
 
-> 💡 Run the Windows script in the **x64 Visual Studio Developer Command Prompt**.
+> Run the Windows script in the **x64 Visual Studio Developer Command Prompt**.
 
 We recommend using **Ninja** to compile faster (optional):
 
@@ -35,4 +35,4 @@ We recommend using **Ninja** to compile faster (optional):
 py -m pip install ninja
 ```
 
-After building, the output `.so` or `.pyd` files will be found in the `Release` folder.
+After building, the output will be a `.so` or `.pyd` file that will match those in the `Release` folder. Our code is written for `C++ 17` and `Python 3.13` and will not necessarily run in other versions.
