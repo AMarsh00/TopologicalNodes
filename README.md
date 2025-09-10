@@ -84,7 +84,7 @@ Run the appropriate script from the `Source Code` folder:
 
 ### Output
 
-After building, you'll get a `.so` or `.pyd` file in the `Release` folder — ready to be imported in Python:
+After building, you'll get a `.so` or `.pyd` file in the `Release` folder that can imported in Python:
 
 ```python
 import LooseTopologicalNode
