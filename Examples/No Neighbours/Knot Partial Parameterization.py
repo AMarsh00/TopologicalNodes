@@ -88,7 +88,7 @@ def generate_sixfoil_knot_tensor(n_points=50):
     knot = np.stack([x, y, z], axis=1)
     np.random.shuffle(knot)
     return torch.tensor(knot, dtype=torch.float32), "sixfoil"
-    
+
 def generate_torus_knot_3_2_tensor(n_points=50):
     """Generate points on a (3,2) torus knot."""
     t = np.linspace(0, 2 * np.pi, n_points, endpoint=False)
@@ -174,7 +174,7 @@ class TorusAutoencoder(nn.Module):
         self.return_layer = nn.Linear(hidden_dim, latent_dim)
         self.weights = nn.Parameter(torch.zeros(latent_dim))
 
-    # Set target geometry of a torus
+    # Set target geometry of a cylinder
     def normalize_z2(self, z2):
         z2 = z2 - z2.mean(dim=0, keepdim=True)
         vec2d = F.normalize(z2[:, :2], dim=1)
@@ -201,7 +201,19 @@ class TorusAutoencoder(nn.Module):
         angles = self.angle_layer(z2)
         out = self.decoder(z2[:, :4])
         return z1, z2, angles, out
-
+    
+def add_angle_features(data):
+    """
+    Add cos(θ) and sin(θ) as two extra dimensions.
+    θ is computed as the angle around the centroid in the XY-plane.
+    """
+    xy = data[:, :2]
+    center = xy.mean(dim=0, keepdim=True)
+    rel_xy = xy - center
+    theta = torch.atan2(rel_xy[:, 1], rel_xy[:, 0])
+    cos_theta = torch.cos(theta).unsqueeze(1)
+    sin_theta = torch.sin(theta).unsqueeze(1)
+    return torch.cat([data, cos_theta, sin_theta], dim=1)
 
 # --- Training Loop with Snapshots ---
 def train_with_snapshots(model, data, epochs=1000, lr=1e-3, snapshot_interval=10):
@@ -324,9 +336,10 @@ if __name__ == "__main__":
     #data, knot_name = generate_sixfoil_knot_tensor(HP['n_points_per_knot'])
     #data, knot_name = generate_torus_knot_3_2_tensor(HP['n_points_per_knot'])
     #data, knot_name = generate_torus_knot_5_3_tensor(HP['n_points_per_knot'])
-    #data, knot_name = generate_unlinked_circles_tensor(HP['n_points_per_knot']) # Not a knot, but shows that two separate things stay separate
+    #data, knot_name = generate_unlinked_circles_tensor(HP['n_points_per_knot'])
     #data, knot_name = generate_simple_circle_tensor(HP['n_points_per_knot'])
-    #data, knot_name = generate_spiral_tensor(HP['n_points_per_knot']) # Not a knot
+    #data, knot_name = generate_spiral_tensor(HP['n_points_per_knot'])
+    data = add_angle_features(data).to(device)
     
     data = data.to(device)
 
@@ -334,13 +347,13 @@ if __name__ == "__main__":
         # Ensure the directory we want to save results to exists
         os.makedirs(f"HomotopyResults/{knot_name}", exist_ok=True)
 
-        path = "HomotopyResults\\{knot_name}\\Animation.gif"
+        path = f"HomotopyResults/{knot_name}/Animation.gif"
     else:
         path = None
 
     # Initialize Model
     model = TorusAutoencoder(
-        input_dim=3,
+        input_dim=5,
         latent_dim=HP['latent_dim'],
         hidden_dim=HP['hidden_dim']
     ).to(device)
