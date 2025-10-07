@@ -294,6 +294,18 @@ class TorusAutoencoder(nn.Module):
         out = self.decoder(z2[:, :4])
         return z1, z2, angles, out
 
+def add_angle_features(data):
+    """
+    Add cos(θ) and sin(θ) as two extra dimensions.
+    θ is computed as the angle around the centroid in the XY-plane.
+    """
+    xy = data[:, :2]
+    center = xy.mean(dim=0, keepdim=True)
+    rel_xy = xy - center
+    theta = torch.atan2(rel_xy[:, 1], rel_xy[:, 0])
+    cos_theta = torch.cos(theta).unsqueeze(1)
+    sin_theta = torch.sin(theta).unsqueeze(1)
+    return torch.cat([data, cos_theta, sin_theta], dim=1)
 
 # --- Training Loop with Snapshots ---
 def train_with_snapshots(model, data, epochs=1000, lr=1e-3, snapshot_interval=10):
@@ -424,6 +436,7 @@ if __name__ == "__main__":
     #data, dataset_name = generate_linked_two_ellipses_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_unlinked_circles_far_tensor(HP['n_points_per_circle'])
     #data, dataset_name = generate_trefoil_with_linked_circle_tensor(HP['n_points_per_circle'])
+    data = add_angle_features(data).to(device)
     
     data = data.to(device)
 
@@ -437,7 +450,7 @@ if __name__ == "__main__":
 
     # Initialize Model
     model = TorusAutoencoder(
-        input_dim=3,
+        input_dim=5,
         latent_dim=HP['latent_dim'],
         hidden_dim=HP['hidden_dim']
     ).to(device)
