@@ -406,6 +406,18 @@ class TorusAutoencoder(nn.Module):
         out = self.decoder(z2[:, :4])
         return z1, z2, angles, out
 
+def add_angle_features(data):
+    """
+    Add cos(θ) and sin(θ) as two extra dimensions.
+    θ is computed as the angle around the centroid in the XY-plane.
+    """
+    xy = data[:, :2]
+    center = xy.mean(dim=0, keepdim=True)
+    rel_xy = xy - center
+    theta = torch.atan2(rel_xy[:, 1], rel_xy[:, 0])
+    cos_theta = torch.cos(theta).unsqueeze(1)
+    sin_theta = torch.sin(theta).unsqueeze(1)
+    return torch.cat([data, cos_theta, sin_theta], dim=1)
 
 # --- Training Loop with Snapshots ---
 def train_with_snapshots(model, data, epochs=1000, lr=1e-3, snapshot_interval=10):
@@ -443,6 +455,7 @@ if __name__ == "__main__":
     #data, dataset_name = generate_helix_column_cloud(HP['n_points_per_cloud'])
     #data, dataset_name = generate_chaotic_swirl_cloud(HP['n_points_per_cloud'])
     #data, dataset_name = generate_fractal_tree_cloud(HP['n_points_per_cloud'])
+    data = add_angle_features(data).to(device)
     
     data = data.to(device)
 
@@ -456,7 +469,7 @@ if __name__ == "__main__":
 
     # Initialize Model
     model = TorusAutoencoder(
-        input_dim=3,
+        input_dim=5,
         latent_dim=HP['latent_dim'],
         hidden_dim=HP['hidden_dim']
     ).to(device)
